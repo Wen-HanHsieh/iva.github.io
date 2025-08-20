@@ -1,4 +1,4 @@
-# Visual Haystacks: Answering Harder Questions About Sets of Images
+# IVA: Teaching Vision-Language-Action Models to Reject the Impossible
 
 This is an academic paper project page template.
 
