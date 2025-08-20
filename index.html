@@ -1,378 +1,113 @@
 <!DOCTYPE html>
 <html>
-
 <head>
-    <meta charset="utf-8">
-    <!-- Meta tags for social media banners, these should be filled in appropriately as they are your "business card" -->
-    <!-- Replace the content tag with appropriate information -->
-    <meta name="description" content="Visual Haystacks: A Vision-Centric Needle-In-A-Haystack Benchmark">
-    <meta property="og:title" content="Visual Haystacks" />
-    <meta property="og:description" content="Large Multimodal Models (LMMs) have made significant strides in visual question-answering for single images. Recent advancements like long-context LMMs have allowed them to ingest larger, or even multiple, images. However, the ability to process a large number of visual tokens does not guarantee effective retrieval and reasoning for multi-image question answering (MIQA), especially in real-world applications like photo album searches or satellite imagery analysis. In this work, we first assess the limitations of current benchmarks for long-context LMMs. We address these limitations by introducing a new vision-centric, long-context benchmark, Visual Haystacks (VHs). We comprehensively evaluate both open-source and proprietary models on VHs, and demonstrate that these models struggle when reasoning across potentially unrelated images, perform poorly on cross-image reasoning, as well as exhibit biases based on the placement of key information within the context window. Towards a solution, we introduce MIRAGE (Multi-Image Retrieval Augmented Generation), an open-source, lightweight visual-RAG framework that processes up to 10k images on a single 40G A100 GPU -- far surpassing the 1k-image limit of contemporary models. MIRAGE demonstrates up to 13% performance improvement over existing open-source LMMs on VHs, sets a new state-of-the-art on the RetVQA multi-image QA benchmark, and achieves competitive performance on single-image QA with state-of-the-art LMMs." />
-    <meta property="og:url" content="http://visual-haystacks.github.io" />
-    <!-- Path to banner image, should be in the path listed below. Optimal dimensions are 1200X630-->
-    <meta property="og:image" content="/static/images/VHs_logo.png" />
-    <meta property="og:image:width" content="1200" />
-    <meta property="og:image:height" content="630" />
+  <meta charset="utf-8">
+  <meta name="description" content="IVA: Teaching Vision-Language-Action Models to Reject the Impossible">
+  <meta property="og:title" content="IVA: Instruct-Verify-and-Act" />
+  <meta property="og:description" content="IVA is a framework for Vision-Language-Action models that detects false-premise instructions, generates clarifications, and suggests valid alternatives. IVA improves false premise detection accuracy by 58.9% and increases successful responses by 27.9% compared to baselines." />
+  <meta property="og:url" content="http://iva-vla.github.io" />
+  <meta property="og:image" content="static/images/iva_logo.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
 
+  <meta name="twitter:title" content="IVA: Teaching VLAs to Reject the Impossible">
+  <meta name="twitter:description" content="IVA trains robots to detect false-premise instructions, clarify with language, and propose alternatives for safer human-robot interaction." />
+  <meta name="twitter:image" content="static/images/iva_logo.png">
+  <meta name="twitter:card" content="summary_large_image">
 
-    <meta name="twitter:title" content="Visual Haystacks: A Vision-Centric Needle-In-A-Haystack Benchmark">
-    <meta name="twitter:description" content="Large Multimodal Models (LMMs) have made significant strides in visual question-answering for single images. Recent advancements like long-context LMMs have allowed them to ingest larger, or even multiple, images. However, the ability to process a large number of visual tokens does not guarantee effective retrieval and reasoning for multi-image question answering (MIQA), especially in real-world applications like photo album searches or satellite imagery analysis. In this work, we first assess the limitations of current benchmarks for long-context LMMs. We address these limitations by introducing a new vision-centric, long-context benchmark, Visual Haystacks (VHs). We comprehensively evaluate both open-source and proprietary models on VHs, and demonstrate that these models struggle when reasoning across potentially unrelated images, perform poorly on cross-image reasoning, as well as exhibit biases based on the placement of key information within the context window. Towards a solution, we introduce MIRAGE (Multi-Image Retrieval Augmented Generation), an open-source, lightweight visual-RAG framework that processes up to 10k images on a single 40G A100 GPU -- far surpassing the 1k-image limit of contemporary models. MIRAGE demonstrates up to 13% performance improvement over existing open-source LMMs on VHs, sets a new state-of-the-art on the RetVQA multi-image QA benchmark, and achieves competitive performance on single-image QA with state-of-the-art LMMs." />
-    <!-- Path to banner image, should be in the path listed below. Optimal dimensions are 1200X600-->
-    <meta name="twitter:image" content="static/images/VHs_logo.png">
-    <meta name="twitter:card" content="Visual Haystack Project Logo: A cartoon character photo sitting on top of a haystack of images.">
-    <!-- Keywords for your paper to be indexed by-->
-    <meta name="keywords"
-        content="Large Multimodal Models, Long-context Reasoning, VQA, Image Retrieval">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="keywords" content="Vision-Language-Action Models, Robotics, False Premise Detection, Instruction Following">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
 
-
-    <title>Visual Haystacks: A Vision-Centric Needle-In-A-Haystack Benchmark</title>
-    <link rel="icon" type="image/x-icon" href="static/images/favicon_io/favicon.ico">
-    <link rel="apple-touch-icon" sizes="180x180" href="static/images/favicon_io">
-    <link rel="icon" type="image/png" sizes="32x32" href="static/images/favicon_io/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="static/images/favicon_io/favicon-16x16.png">
-    <link rel="manifest" href="static/images/favicon_io/site.webmanifest">
-    <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro" rel="stylesheet">
-
-    <link rel="stylesheet" href="static/css/bulma.min.css">
-    <link rel="stylesheet" href="static/css/bulma-carousel.min.css">
-    <link rel="stylesheet" href="static/css/bulma-slider.min.css">
-    <link rel="stylesheet" href="static/fontawesome/css/all.min.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
-    <link rel="stylesheet" href="static/css/index.css">
-
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="https://documentcloud.adobe.com/view-sdk/main.js"></script>
-    <script defer src="static/fontawesome/js/fontawesome.min.js"></script>
-    <script src="static/js/bulma-carousel.min.js"></script>
-    <script src="static/js/bulma-slider.min.js"></script>
-    <script src="static/js/index.js"></script>
+  <title>IVA: Instruct-Verify-and-Act</title>
+  <link rel="icon" type="image/x-icon" href="static/images/favicon.ico">
+  <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro" rel="stylesheet">
+  <link rel="stylesheet" href="static/css/bulma.min.css">
+  <link rel="stylesheet" href="static/css/index.css">
 </head>
 
 <body>
-
-
-    <section class="hero">
-        <div class="hero-body">
-            <div class="container is-max-desktop">
-                <div class="columns is-centered is-vcentered">
-                    <div class="column "><img src="static/images/vhs_logo.png" height="187" width="187"></div>
-                    <div class="column has-text-centered is-four-fifths is-vcentered">
-                        <h1 class="title is-1 publication-title">Visual Haystacks: A Vision-Centric Needle-In-A-Haystack Benchmark</h1>
-                    </div>
-                </div>
-                <div class="container is-max-desktop">
-                    <div class="columns is-centered">
-                        <div class="column has-text-centered is-four-fifths">
-                            <div class="is-size-5 publication-authors">
-                                <!-- Paper authors -->
-                                <span class="author-block">
-                                    <a href="https://tsunghan-wu.github.io/" target="_blank">Tsung-Han
-                                        Wu</a>,</span>
-                                <span class="author-block">
-                                    <a href="https://scholar.google.com/citations?user=s0Fof5IAAAAJ" target="_blank">Giscard
-                                        Biamby</a>,</span>
-                                <span class="author-block">
-                                    <a href="https://people.eecs.berkeley.edu/~jquenum/" target="_blank">Jerome Quenum</a>,
-                                </span>
-                                <span class="author-block">
-                                    <a href="https://ritwikgupta.me/" target="_blank">Ritwik Gupta</a>,
-                                </span><br>
-                                <span class="author-block">
-                                    <a href="https://people.eecs.berkeley.edu/~jegonzal/" target="_blank">Joseph E. Gonzalez</a>,
-                                </span>
-                                <span class="author-block">
-                                    <a href="https://people.eecs.berkeley.edu/~trevor/" target="_blank">Trevor Darrell</a>,
-                                </span>
-                                <span class="author-block">
-                                    <a href="https://dchan.cc/" target="_blank">David M. Chan</a>
-                                </span>
-                            </div>
-
-                            <div class="is-size-5 publication-authors">
-                                <span class="author-block">UC Berkeley<br>
-                                <span class="author-block" style="font-weight: bold;">ICLR 2025</span><br>
-                                <span class="author-block" style="font-weight: bold;">BayLearn 2024 (Oral)</span></span>
-                            </div>
-
-                            <div class="column has-text-centered">
-                                <div class="publication-links">
-
-                                    <span class="link-block">
-                                        <a href="https://arxiv.org/abs/2407.13766" target="_blank"
-                                            class="external-link button is-normal is-rounded is-dark">
-                                            <span class="icon">
-                                                <i class="ai ai-arxiv"></i>
-                                            </span>
-                                            <span>arXiv</span>
-                                        </a>
-                                    </span>
-
-                                    <span class="link-block">
-                                        <a href="https://bair.berkeley.edu/blog/2024/07/20/visual-haystacks/" target="_blank"
-                                            class="external-link button is-normal is-rounded is-dark">
-                                            <span class="icon" style="vertical-align: middle; font-size: 20px;">📝</span>
-                                            <span>Blog</span>
-                                        </a>
-                                    </span>
-
-                                    <span class="link-block">
-                                        <a href="https://www.youtube.com/watch?v=PZ7H9vNZZag" target="_blank"
-                                            class="external-link button is-normal is-rounded is-dark">
-                                            <span class="icon">
-                                                <i class="fa-brands fa-youtube"></i>
-                                            </span>
-                                            <span>Youtube</span>
-                                        </a>
-                                    </span>
-
-                                    <span class="link-block">
-                                        <a href="https://github.com/visual-haystacks/vhs_benchmark" target="_blank"
-                                            class="external-link button is-normal is-rounded is-dark">
-                                            <span class="icon">
-                                                <i class="fa-brands fa-github"></i>
-                                            </span>
-                                            <span>VHs Dataset</span>
-                                        </a>
-                                    </span>
-
-                                    <span class="link-block">
-                                        <a href="https://github.com/visual-haystacks/mirage" target="_blank"
-                                            class="external-link button is-normal is-rounded is-dark">
-                                            <span class="icon">
-                                                <i class="fa-brands fa-github"></i>
-                                            </span>
-                                            <span>MIRAGE's Code/Model</span>
-                                        </a>
-                                    </span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+  <section class="hero">
+    <div class="hero-body">
+      <div class="container is-max-desktop">
+        <div class="columns is-centered is-vcentered">
+          <div class="column"><img src="static/images/iva_logo.png" height="187" width="187"></div>
+          <div class="column has-text-centered is-four-fifths">
+            <h1 class="title is-1">IVA: Instruct-Verify-and-Act</h1>
+            <h2 class="subtitle is-4">Teaching Vision-Language-Action Models to Reject the Impossible</h2>
+          </div>
         </div>
-    </section>
 
-
-    <!-- Paper abstract -->
-    <section class="section hero ">
-        <div class="container is-max-desktop">
-            <div class="columns is-centered has-text-centered">
-                <div class="column is-full">
-
-                    <!-- YouTube Video Link -->
-<!--                     <h2 class="title is-4">Video Introduction</h2>
-                    <div class="content has-text-justified">
-                        <div class="video-wrapper">
-                            <iframe src="https://www.youtube.com/embed/PZ7H9vNZZag" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-                        </div>
-                    </div> -->
-                    <h2 class="title is-4">Abstract</h2>
-                    <div class="content has-text-justified">
-                        <p>
-                        Large Multimodal Models (LMMs) have made significant strides in visual question-answering for single images. Recent advancements like long-context LMMs have allowed them to ingest larger, or even multiple, images. <b>However, the ability to process a large number of visual tokens does not guarantee effective retrieval and reasoning for multi-image question answering (MIQA)</b>, especially in real-world applications like photo album searches or satellite imagery analysis. In this work, we first assess the limitations of current benchmarks for long-context LMMs. We address these limitations by introducing a new vision-centric, long-context benchmark, "Visual Haystacks (VHs)". We comprehensively evaluate both open-source and proprietary models on VHs, and demonstrate that these models struggle when reasoning across potentially unrelated images, perform poorly on cross-image reasoning, as well as exhibit biases based on the placement of key information within the context window. Towards a solution, we introduce MIRAGE (Multi-Image Retrieval Augmented Generation), an open-source, lightweight visual-RAG framework that processes up to 10k images on a single 40G A100 GPU -- far surpassing the 1k-image limit of contemporary models. MIRAGE demonstrates up to 13% performance improvement over existing open-source LMMs on VHs, sets a new state-of-the-art on the RetVQA multi-image QA benchmark, and achieves competitive performance on single-image QA with state-of-the-art LMMs.
-                        </p>
-                    </div>
-
-                </div>
+        <div class="columns is-centered">
+          <div class="column has-text-centered is-four-fifths">
+            <div class="is-size-5 publication-authors">
+              <!-- Authors -->
+              <span class="author-block"><a href="https://wen-hanhsieh.github.io/" target="_blank">Wen-Han Hsieh*</a>,</span>
+              <span class="author-block"><a href="https://elvishh77.github.io/" target="_blank">Elvis Hsieh*</a>,</span>
+              <span class="author-block"><a href="https://dantong88.github.io/" target="_blank">Dantong Niu</a>,</span>
+              <span class="author-block"><a href="https://roeiherz.github.io/" target="_blank">Roei Herzig</a>,</span>
+              <span class="author-block"><a href="https://dchan.cc/" target="_blank">David M. Chan</a>,</span>
+              <span class="author-block"><a href="https://people.eecs.berkeley.edu/~trevor/" target="_blank">Trevor Darrell</a></span>
             </div>
-        </div>
-    </section>
-    <!-- End paper abstract -->
 
-
-
-    <!-- SESAME -->
-    <section class="section ">
-        <div class="container is-max-desktop">
-            <div class="columns is-centered has-text-centered">
-                <div class="column is-full">
-                    <h2 class="title is-4">Visual Haystacks (VHs): A Vision-centric Needle-In-A-Haystack Benchmark</h2>
-                </div>
+            <div class="is-size-5 publication-authors">
+              <span class="author-block">UC Berkeley</span>
             </div>
-            <!-- <div id="results-carousel" class="carousel results-carousel"> -->
-                <div class="content has-text-justified">
-                    <p>Visual Haystacks (VHs) is a "vision-centric" Needle-In-A-Haystack (NIAH) benchmark specifically designed to evaluate the capabilities of Large Multimodal Models (LMMs) in visual retrieval and reasoning over sets of unrelated images. Unlike conventional NIAH challenges that center on artificial, text-related retrieval and understanding with limited anecdotal examples, VHs contains a much larger number of examples and focuses on "simple visual tasks", providing a more accurate reflection of LMMs' capabilities when dealing with extensive visual context. 
-                    </p>
-                </div>
-                <div class="item is-vcentered">
-                    <img src="static/images/figures/fig1.png" alt="VHs dataset overview" />
-                </div>
-                <br>
-                <div class="content has-text-justified">
-                    <p>
-                        The dataset is derived from the in-domain COCO dataset and includes straightforward questions, focusing exclusively on long-context visual retrieval and reasoning capabilities. It features two types of challenges: the Single-Needle Challenge and the Multi-Needle Challenge. For more information, please visit our <a href="https://github.com/visual-haystacks/vhs_benchmark">GitHub repository</a>.
-                    <ol>
-                        <li><b>Single-Needle Challenge</b>: Only a single needle image exists in the haystack of images. The question is framed as, "For the image with the anchor object, is there a target object?"
-                        </li>
-                        <li><b>Multi-Needle Challenge</b>: Two or three needle images exist in the haystack of images. The question is framed as either, "For all images with the anchor object, do all of them contain the target object?" or "For all images with the anchor object, do any of them contain the target object?"
-                        </li>
-                    </ol>
-                    </p>
-                </div>
-            <!-- </div> -->
-        </div>
-    </section>
 
-    <section class="section hero">
-        <div class="container is-max-desktop">
-            <div class="columns is-centered has-text-centered">
-                <div class="column is-full">
-                    <h2 class="title is-4">Comprehensive Analyses/Interesting Findings</h2>
-                    <div class="content has-text-justified">
-                        <ul>
-                            <li>
-                                <b>Context Limitations</b>: Current LMMs cannot process more than 100 images due to API rejections (payload exceeding limits), context length overflows, or memory constraints on 4 A100 GPUs.
-                            </li>
-                        </ul>
-                    </div>
-                    <div class="content has-text-justified">
-                        <ul>
-                            <li>
-                                <b>Susceptibility to Visual Distractors</b>: While LMMs can perform nearly as well as specialized detectors on single-image tasks, their effectiveness decreases significantly as the number of images increases.
-                            </li>
-                        </ul>
-                    </div>
-                    <div class="item is-vcentered">
-                        <img src="static/images/figures/fig2.png" alt="Effectiveness of LMMs with increasing number of images" width="90%">
-                    </div>
-
-                    <div class="content has-text-justified">
-                        <ul>
-                            <li>
-                                <b>Challenges in Cross-Image Reasoning</b>: LMMs experience substantial performance declines when required to integrate information across multiple key images; reintroducing noisy images exacerbates this decline even further.
-                            </li>
-                        </ul>
-                    </div>
-                    <div class="item is-vcentered">
-                        <img src="static/images/figures/fig3.png" alt="Challenges in Cross-Image Reasoning" width="90%">
-                    </div>
-                    <div class="content has-text-justified">
-                        <ul>
-                            <li>
-                                <b>Positional Biases</b>: LMMs exhibit various positional biases—information placed at different positions within the context window yields different results. For instance, GPT-4 exhibits a <a href="https://arxiv.org/abs/2307.03172">"lost-in-the-middle"</a> phenomenon in the visual domain, Gemini 1.5 Pro shows a preference for images at the beginning, and open-source models often favor the last image when given a small set.
-                            </li>
-                        </ul>
-                    </div>
-                    <div class="item is-vcentered">
-                        <img src="static/images/figures/fig4.png" alt="Positional Biases in LMMs" width="92%">
-                    </div>
-                </div>
+            <div class="publication-links">
+              <a href="https://arxiv.org/abs/XXXX.XXXXX" target="_blank" class="button is-dark is-rounded">arXiv</a>
+              <a href="https://github.com/iva-vla" target="_blank" class="button is-dark is-rounded">Code & Dataset</a>
             </div>
+          </div>
         </div>
-    </section>
+      </div>
+    </div>
+  </section>
 
+  <!-- Abstract -->
+  <section class="section hero">
+    <div class="container is-max-desktop">
+      <h2 class="title is-4">Abstract</h2>
+      <div class="content has-text-justified">
+        <p>
+        Vision-Language-Action (VLA) models enable robots to follow natural language instructions grounded in visual perception and actions. However, most assume instructions are always feasible. We propose <b>IVA (Instruct-Verify-and-Act)</b>, a unified framework that (i) detects when an instruction cannot be executed due to a false premise, (ii) generates clarifications or corrections, and (iii) grounds plausible alternatives in perception and action. IVA is trained with a semi-synthetic dataset of true and false-premise instructions, enabling robust detection and correction. Experiments on RLBench tasks show IVA improves false premise detection accuracy by <b>58.9%</b> and increases successful responses in false-premise scenarios by <b>27.9%</b> compared to baselines:contentReference[oaicite:0]{index=0}.
+        </p>
+      </div>
+    </div>
+  </section>
 
-    <section class="section hero">
-        <div class="container is-max-desktop">
-            <div class="columns is-centered has-text-centered">
-                <div class="column is-full">
-                    <h2 class="title is-4">Our Solution: MIRAGE - Multi-Image Retrieval Augmented Generation</h2>
-                    <div class="content has-text-justified">
-                        <p>Through extensive experiments above, we demonstrated that existing LMMs struggle with inputs exceeding 100 images due to API limitations, context overflow, or hardware constraints on 4 A100 GPUs. Also, these models often face issues such as visual distractions, cross-image reasoning difficulties, and positional biases. To overcome these challenges, we developed MIRAGE (8.3B), a pioneering, open-source <b>visual-RAG baseline model based on LMMs capable of handling tens of thousands of images</b>.
-                        </p>
-                        <ul>
-                            <li><b>Model Architecture</b>: MIRAGE handles questions and images through several steps: encoding features with CLIP, compressing image features with our Q-Former, calculating relevance scores with a retriever, and feeding only relevant images to the LLM. During instruction finetuning, the model is supervised for the next token prediction and the relevance prediction task, utilizing Binary Cross Entropy loss between the ground truth {0, 1} and the predicted number.
-                            </li>
-                            <br>
-                            <li><b>Multi-Image Instruction Tuning Dataset</b>: We construct an open-source multi-image instruction tuning dataset. We augment existing single-image LLaVA instruction tuning data into a multi-image fashion. Additionally, we include a mix of data from other multi-image sources including RetVQA, SlideVQA, and WebQA. 
-                            </li>
-                        </ul>
-                    </div>
+  <!-- Results -->
+  <section class="section hero">
+    <div class="container is-max-desktop">
+      <h2 class="title is-4">Key Results</h2>
+      <ul>
+        <li><b>False Premise Detection</b>: 100% accuracy on easy false premises, 17.8% on hard false premises.</li>
+        <li><b>Improved Success Rates</b>: +27.9% improvement in false-premise handling compared to LLaRVA baseline:contentReference[oaicite:1]{index=1}.</li>
+        <li><b>Stable True-Premise Performance</b>: Maintains ~35% task success rate on true-premise tasks, comparable to baseline.</li>
+      </ul>
+      <div class="item is-vcentered">
+        <img src="static/images/results_table.png" alt="IVA vs LLaRVA results" width="90%">
+      </div>
+    </div>
+  </section>
 
-                    <div class="item is-vcentered">
-                        <img src="static/images/figures/MIRAGE.png" alt="MY ALT TEXT" width="90%" />
-                    </div>
-                    <div class="content has-text-justified">
-                        <ul>
-                            <li>
-                                <b>Exceptional VHs Performance</b>: Our MIRAGE model stands out in the VHs challenges. It is the only solution capable of scaling to 10,000 input images, demonstrating up to a 13% performance improvement over existing open-source alternatives and leading in most cases. Additionally, it surpasses GPT-4 and Gemini 1.5 Pro in the single-needle challenge with more than 50 images. However, its suboptimal performance in the multi-needle challenge highlights significant areas for improvement.
-                            </li>
-                        </ul>
-                    </div>
-                    <div class="item is-vcentered">
-                        <img src="static/images/figures/result_vhs.png" alt="MY ALT TEXT" width="90%" />
-                    </div>
-
-                    <div class="content has-text-justified">
-                        <ul>
-                            <li>
-                                <b>Reasonable VQA Performance</b>: The MIRAGE model excels in the multi-image VQA task, significantly outperforming competitors like GPT-4o, Gemini-v1.5, and the Large World Model (LWM). MIRAGE also maintains solid performance on single-image tasks, showcasing its versatile reasoning capabilities.
-                            </li>
-                        </ul>
-                    </div>
-                    <div class="item is-vcentered">
-                        <img src="static/images/figures/result_vqa.png" alt="MY ALT TEXT" width="80%" />
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-
-
-    <!-- Paper poster -->
-    <!-- <section class="hero is-small is-light">
-        <div class="hero-body">
-            <div class="container">
-                <h2 class="title">Poster</h2>
-
-                <iframe src="static/pdfs/sample.pdf" width="100%" height="550">
-                </iframe>
-
-            </div>
-        </div>
-    </section> -->
-    <!--End paper poster -->
-
-
-    <!--BibTex citation -->
-    <section class="section" id="BibTeX">
-        <div class="container is-max-desktop content">
-            <h2 class="title">BibTeX</h2>
-            <pre><code>@inproceedings{
-    wu2025visual,
-    title={Visual Haystacks: A Vision-Centric Needle-In-A-Haystack Benchmark},
-    author={Tsung-Han Wu and Giscard Biamby and Jerome Quenum and Ritwik Gupta and Joseph E. Gonzalez and Trevor Darrell and David Chan},
-    booktitle={The Thirteenth International Conference on Learning Representations},
-    year={2025},
-    url={https://openreview.net/forum?id=9JCNPFL1f9}
+  <!-- BibTeX -->
+  <section class="section" id="BibTeX">
+    <div class="container is-max-desktop content">
+      <h2 class="title">BibTeX</h2>
+      <pre><code>@article{iva2025,
+  title={Do What? Teaching Vision-Language-Action Models to Reject the Impossible},
+  author={Wen-Han Hsieh and Elvis Hsieh and Dantong Niu and Roei Herzig and David M. Chan and Trevor Darrell},
+  journal={arXiv preprint},
+  year={2025},
+  url={https://arxiv.org/abs/XXXX.XXXXX}
 }</code></pre>
-        </div>
-    </section>
-    <!--End BibTex citation -->
+    </div>
+  </section>
 
-
-    <footer class="footer">
-        <div class="container">
-            <div class="columns is-centered">
-                <div class="column is-8">
-                    <div class="content">
-
-                        <p>
-                            This page was built using the <a
-                                href="https://github.com/eliahuhorwitz/Academic-project-page-template"
-                                target="_blank">Academic Project Page Template</a> which was adopted from the <a
-                                href="https://nerfies.github.io" target="_blank">Nerfies</a> project page.
-                            You are free to borrow the of this website, we just ask that you link back to this page in
-                            the footer. <br> This website is licensed under a <a rel="license"
-                                href="http://creativecommons.org/licenses/by-sa/4.0/" target="_blank">Creative
-                                Commons Attribution-ShareAlike 4.0 International License</a>.
-                        </p>
-
-                    </div>
-                </div>
-            </div>
-        </div>
-    </footer>
-
-    <!-- Statcounter tracking code -->
-
-    <!-- You can add a tracker to track page visits by creating an account at statcounter.com -->
-
-    <!-- End of Statcounter Code -->
-
+  <footer class="footer">
+    <div class="container has-text-centered">
+      <p>Built with the <a href="https://github.com/eliahuhorwitz/Academic-project-page-template">Academic Project Page Template</a></p>
+    </div>
+  </footer>
 </body>
-
 </html>
