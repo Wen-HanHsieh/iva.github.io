@@ -2,89 +2,69 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <title>Do What? Teaching Vision-Language-Action Models to Reject the Impossible  </title>
+  <title>IVA: Instruct-Verify-and-Act</title>
 
-  <!-- Meta / SEO -->
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="description" content="IVA teaches Vision-Language-Action models to detect false-premise instructions, clarify them in natural language, and act safely." />
-  <meta name="keywords" content="Vision-Language-Action, Robotics, False Premise, Instruction Following, Human-Robot Interaction" />
   <link rel="canonical" href="https://iva-vla.github.io/" />
 
-  <!-- Open Graph / Twitter -->
+  <!-- Social -->
   <meta property="og:title" content="IVA: Instruct-Verify-and-Act" />
-  <meta property="og:description" content="Detect the impossible. Clarify intent. Act safely. IVA brings false-premise reasoning to VLA models." />
+  <meta property="og:description" content="Detect the impossible. Clarify intent. Act safely." />
   <meta property="og:url" content="https://iva-vla.github.io/" />
-  <!-- Use Figure 1 as the share image -->
   <meta property="og:image" content="static/images/fig1_teaser.png" />
   <meta property="og:image:width" content="1200" />
   <meta property="og:image:height" content="630" />
   <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="IVA: Teaching VLAs to Reject the Impossible" />
-  <meta name="twitter:description" content="IVA detects false-premise instructions, asks clarifying questions, and proposes valid alternatives." />
+  <meta name="twitter:title" content="IVA: Instruct-Verify-and-Act" />
+  <meta name="twitter:description" content="Detect the impossible. Clarify intent. Act safely." />
   <meta name="twitter:image" content="static/images/fig1_teaser.png" />
-
-  <!-- Favicon & Fonts -->
-  <link rel="icon" type="image/x-icon" href="static/images/favicon.ico" />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Castoro:wght@400;700&display=swap" rel="stylesheet" />
 
   <!-- Bulma & Custom -->
   <link rel="stylesheet" href="static/css/bulma.min.css" />
   <link rel="stylesheet" href="static/css/index.css" />
 
   <style>
-    :root { --brand: #1f6feb; }
+    :root { --brand:#1f6feb; }
     body { font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif; }
-    .hero.is-dark-gradient {
+
+    /* ---- keep title on ONE line ---- */
+    .title-nowrap {
+      white-space: nowrap;
+      font-size: clamp(28px, 5.5vw, 56px); /* auto-shrink before wrapping */
+      line-height: 1.05;
+      letter-spacing: -0.02em;
+    }
+
+    .hero.is-dark {
       background: radial-gradient(1100px 600px at 10% 10%, rgba(31,111,235,0.10), transparent 45%),
                   linear-gradient(180deg, #0b1220 0%, #0b1220 60%, #0d1326 100%);
       color: #fff;
     }
     .hero .title, .hero .subtitle { color:#fff; }
-    .teaser {
-      width: 100%; border-radius: 16px; overflow: hidden;
-      border: 1px solid rgba(255,255,255,.18); box-shadow: 0 8px 24px rgba(0,0,0,.35);
-      background:#0f162a;
-    }
-    .badges .button { margin: .25rem .35rem; }
-    figure img { width:100%; border-radius: 12px; }
+    .teaser { width:100%; border-radius:16px; border:1px solid rgba(255,255,255,.18); box-shadow:0 8px 24px rgba(0,0,0,.35); background:#0f162a; }
+    .badges .button { margin:.25rem .35rem; }
+    figure img { width:100%; border-radius:12px; }
     figcaption { color:#6b7280; text-align:center; margin-top:.4rem; }
-    .author-block a { text-decoration: none; }
+    .author-block a { text-decoration:none; }
     .muted { color:#6b7280; }
-    pre code { white-space: pre-wrap; }
+    .kv { margin: .5rem 0 0 0; }
+    .kv b { color:#111827; }
+    .content ul { margin-top: .4rem; }
   </style>
-
-  <!-- Schema.org -->
-  <script type="application/ld+json">
-  {
-    "@context":"https://schema.org",
-    "@type":"ScholarlyArticle",
-    "name":"Do What? Teaching Vision-Language-Action Models to Reject the Impossible",
-    "author":[
-      {"@type":"Person","name":"Wen-Han Hsieh"},
-      {"@type":"Person","name":"Elvis Hsieh"},
-      {"@type":"Person","name":"Dantong Niu"},
-      {"@type":"Person","name":"Trevor Darrell"},
-      {"@type":"Person","name":"Roei Herzig"},
-      {"@type":"Person","name":"David M. Chan"}
-    ],
-    "url":"https://arxiv.org/abs/2508.16292",
-    "inLanguage":"en"
-  }
-  </script>
 </head>
 
 <body>
-  <!-- HERO with Figure 1 teaser -->
-  <section class="hero is-dark-gradient">
+  <!-- HERO (Figure 1 as teaser) -->
+  <section class="hero is-dark">
     <div class="hero-body">
       <div class="container is-max-desktop">
         <div class="columns is-vcentered is-variable is-6">
           <div class="column is-5">
-            <!-- Figure 1 -->
             <img class="teaser" src="static/images/fig1_teaser.png" alt="Figure 1: IVA detects a false-premise instruction and clarifies it." />
           </div>
           <div class="column">
-            <h1 class="title is-1">IVA: Instruct-Verify-and-Act</h1>
+            <h1 class="title title-nowrap">IVA: Instruct-Verify-and-Act</h1>
             <p class="subtitle is-4">Teaching Vision-Language-Action Models to Reject the Impossible</p>
 
             <div class="is-size-5 publication-authors">
@@ -116,8 +96,32 @@
         <p>
           IVA is a unified framework for Vision-Language-Action models that <em>detects</em> when an instruction is unfulfillable (false premise),
           <em>clarifies or corrects</em> it in natural language, and then <em>acts safely</em>. Trained with paired true- and false-premise instructions,
-          IVA improves false-premise handling while maintaining strong true-premise task performance. See the paper for details.
+          IVA improves false-premise handling while maintaining strong true-premise task performance.
         </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Method (paper-grounded) -->
+  <section class="section">
+    <div class="container is-max-desktop">
+      <h2 class="title is-4">Method</h2>
+      <div class="content">
+        <ul>
+          <li><b>End-to-end instruction tuning</b> on a unified dataset; unlike LLaRVA’s two-stage pipeline, IVA trains in one stage for action prediction, FP detection, and language correction. :contentReference[oaicite:0]{index=0}</li>
+          <li><b>Model I/O</b>: input is the front camera plus the previous 5 joint positions; output predicts a 2D visual trace and the next-step action as an 8D vector (7 joint velocities + binary gripper). :contentReference[oaicite:1]{index=1}</li>
+          <li><b>Frozen encoders + LoRA decoder</b>: vision & language encoders are frozen; the auto-regressive transformer decoder is fine-tuned with LoRA. </li>
+          <li><b>Training mix</b>: ~800 episodes per task; ~65% In-Domain FP injected at 10% of steps and ~20% Out-of-Domain FP; remaining are true-premise.  </li>
+        </ul>
+
+        <h3 class="title is-5" style="margin-top:1rem;">Evaluation Procedure</h3>
+        <ul>
+          <li><b>(1) Detection</b>: classify the response as Accept (TP) or Clarify/Refuse (FP); score per step, then average. </li>
+          <li><b>(2) Execution</b>: if Accept, execute predicted 8D action sequence; RLBench success detector judges success/failure. </li>
+          <li><b>(3) Overall</b>: average Detection + Execution across 225 episodes (25 × 9 tasks). </li>
+        </ul>
+
+        <p class="kv"><b>Setup:</b> 9 RLBench tasks, 25 episodes each, randomized object poses; each episode paired with a true or false-premise prompt. </p>
       </div>
     </div>
   </section>
@@ -127,17 +131,25 @@
     <div class="container is-max-desktop">
       <h2 class="title is-4">Results</h2>
 
-      <!-- Table 1 image -->
+      <div class="content">
+        <ul>
+          <li><b>In-Domain FP detection: 100%</b> (perfect) across tasks. </li>
+          <li><b>Gains vs baseline</b>: FP detection accuracy improves by <b>+97.56%</b>; successful responses in FP scenarios increase by <b>+50.78%</b>. </li>
+          <li><b>Full per-task comparison</b> vs LLaRVA shown in Table 1. </li>
+        </ul>
+      </div>
+
+      <!-- Table 1 (paper image) -->
       <figure class="image">
         <img src="static/images/table1_results.png" alt="Table 1: Per-task comparison of IVA vs. LLaRVA on RLBench tasks." />
-        <figcaption>Table 1: IVA vs. LLaRVA across 9 RLBench tasks (Overall Success, FP Detection In/Out, TP Success).</figcaption>
+        <figcaption>Table 1: IVA vs. LLaRVA across 9 RLBench tasks (Overall Success, FP Detection In/Out, TP Success). </figcaption>
       </figure>
 
-      <!-- Figure C.2 image -->
-      <h3 class="title is-5" style="margin-top:1.5rem;">Qualitative Examples (Appendix)</h3>
+      <!-- Figure C.2 (paper image) -->
+      <h3 class="title is-5" style="margin-top:1.25rem;">Qualitative Examples (Appendix)</h3>
       <figure class="image">
         <img src="static/images/figC2_tasks.png" alt="Figure C.2: Qualitative examples across 9 RLBench tasks." />
-        <figcaption>Figure C.2: Qualitative examples of the 9 evaluated tasks.</figcaption>
+        <figcaption>Figure C.2: Qualitative examples of the 9 evaluated tasks. :contentReference[oaicite:13]{index=13}</figcaption>
       </figure>
     </div>
   </section>
