@@ -1,160 +1,274 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-  <meta charset="utf-8" />
-  <title>IVA: Instruct, Verify, Act</title>
+  <script src="static/css/carousel.js"></script>
+  <meta charset="utf-8">
 
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="description" content="IVA teaches Vision-Language-Action models to detect false-premise instructions, clarify them in natural language, and act safely." />
-  <link rel="canonical" href="https://iva-vla.github.io/" />
-
-  <!-- Social -->
+  <!-- Meta / Social (IVA) -->
+  <meta name="description" content="IVA: Instruct, Verify, Act — Teaching VLA Models to Reject the Impossible. IVA detects false-premise instructions, clarifies or corrects them in language, and then acts safely.">
   <meta property="og:title" content="IVA: Instruct, Verify, Act" />
-  <meta property="og:description" content="Detect the impossible. Clarify intent. Act safely." />
-  <meta property="og:url" content="https://iva-vla.github.io/" />
+  <meta property="og:description" content="Teaching VLA Models to Reject the Impossible — Detect the impossible. Clarify intent. Act safely." />
+  <meta property="og:url" content="http://iva-vla.github.io" />
   <meta property="og:image" content="static/images/fig1_teaser.png" />
   <meta property="og:image:width" content="1200" />
   <meta property="og:image:height" content="630" />
-  <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="IVA: Instruct, Verify, Act" />
-  <meta name="twitter:description" content="Detect the impossible. Clarify intent. Act safely." />
-  <meta name="twitter:image" content="static/images/fig1_teaser.png" />
 
-  <link rel="icon" type="image/png" href="static/images/iva_icon.png" />
-  <link rel="stylesheet" href="static/css/bulma.min.css" />
-  <link rel="stylesheet" href="static/css/index.css" />
+  <meta name="twitter:title" content="IVA: Instruct, Verify, Act">
+  <meta name="twitter:description" content="Teaching VLA Models to Reject the Impossible — a unified framework to detect false-premise instructions, clarify them, and act safely.">
+  <meta name="twitter:image" content="static/images/fig1_teaser.png">
+  <meta name="twitter:card" content="summary_large_image">
 
+  <!-- Keywords -->
+  <meta name="keywords" content="Vision-Language-Action, Robotics, False Premise, Instruction Following, Human-Robot Interaction">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>IVA: Instruct, Verify, Act</title>
+  <link rel="icon" type="image/x-icon" href="static/images/favicon_io/favicon.ico">
+  <link rel="apple-touch-icon" sizes="180x180" href="static/images/favicon_io">
+  <link rel="icon" type="image/png" sizes="32x32" href="static/images/favicon_io/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="static/images/favicon_io/favicon-16x16.png">
+  <link rel="manifest" href="static/images/favicon_io/site.webmanifest">
+  <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro" rel="stylesheet">
+
+  <!-- CSS / JS from template -->
+  <link rel="stylesheet" href="static/css/bulma.min.css">
+  <link rel="stylesheet" href="static/css/bulma-carousel.min.css">
+  <link rel="stylesheet" href="static/css/bulma-slider.min.css">
+  <link rel="stylesheet" href="static/fontawesome/css/all.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+  <link rel="stylesheet" href="static/css/index.css">
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://documentcloud.adobe.com/view-sdk/main.js"></script>
+  <script defer src="static/fontawesome/js/fontawesome.min.js"></script>
+  <script src="static/js/bulma-carousel.min.js"></script>
+  <script src="static/js/bulma-slider.min.js"></script>
+  <script src="static/js/index.js"></script>
+
+  <!-- small helpers (minimal, consistent with template) -->
   <style>
-    :root { --brand:#1f6feb; }
-    body { font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif; }
-
-    /* keep the title on a single line by shrinking before wrapping */
-    .title-nowrap {
-      white-space: nowrap;
-      font-size: clamp(28px, 5.5vw, 56px);
-      line-height: 1.05;
-      letter-spacing: -0.02em;
-    }
-
-    .hero.is-dark {
-      background: radial-gradient(1100px 600px at 10% 10%, rgba(31,111,235,0.10), transparent 45%),
-                  linear-gradient(180deg, #0b1220 0%, #0b1220 60%, #0d1326 100%);
-      color: #fff;
-    }
-    .hero .title, .hero .subtitle { color:#fff; }
-    .badges .button { margin:.25rem .35rem; }
-    figure img { width:100%; border-radius:12px; }
-    figcaption { color:#6b7280; text-align:center; margin-top:.4rem; }
-    .author-block a { text-decoration:none; }
-    .muted { color:#9aa3b2; }
-    .brand-row { display:flex; align-items:center; gap:.75rem; }
-    .brand-row img { width:52px; height:52px; border-radius:12px; }
-    .hero-pad { padding-top: 2.25rem; padding-bottom: 2.25rem; }
+    .publication-title-nowrap { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .title-row { display: inline-flex; align-items: center; gap: 12px; }
+    .title-row img { width: 64px; height: 64px; border-radius: 12px; }
+    .fig-medium { max-width: 800px; margin: 1rem auto; }
   </style>
 </head>
 
 <body>
-  <!-- HERO (text-only; icon + title + subtitle) -->
-  <section class="hero is-dark">
-    <div class="hero-body hero-pad">
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-body">
       <div class="container is-max-desktop">
-        <div class="brand-row" style="margin-bottom:.25rem;">
-          <img src="static/images/iva_icon.png" alt="IVA icon" />
-          <h1 class="title title-nowrap" style="margin:0;">IVA: Instruct, Verify, Act</h1>
+        <div class="columns is-centered is-vcentered">
+          <div class="column has-text-centered is-four-fifths is-vcentered">
+            <div class="title-row">
+              <img src="static/images/iva_icon.png" alt="IVA icon">
+              <h1 class="title is-1 publication-title publication-title-nowrap" style="margin:0;">
+                IVA: Instruct, Verify, Act
+              </h1>
+            </div>
+            <p class="subtitle is-4" style="margin-top:.5rem;">Teaching VLA Models to Reject the Impossible</p>
+          </div>
         </div>
-        <p class="subtitle is-4" style="margin-top:.25rem;">Teaching VLA Models to Reject the Impossible</p>
 
-        <div class="is-size-5 publication-authors" style="margin-top:.75rem;">
-          <span class="author-block"><a href="https://wen-hanhsieh.github.io/" target="_blank">Wen-Han Hsieh</a><span class="has-text-grey-light">*</span>,</span>
-          <span class="author-block"><a href="https://elvishh77.github.io/" target="_blank">Elvis Hsieh</a><span class="has-text-grey-light">*</span>,</span>
-          <span class="author-block"><a href="https://dantong88.github.io/" target="_blank">Dantong Niu</a>,</span>
-          <span class="author-block"><a href="https://people.eecs.berkeley.edu/~trevor/" target="_blank">Trevor Darrell</a>,</span>
-          <span class="author-block"><a href="https://roeiherz.github.io/" target="_blank">Roei Herzig</a>,</span>
-          <span class="author-block"><a href="https://dchan.cc/" target="_blank">David M. Chan</a></span>
-        </div>
-        <div class="muted">University of California, Berkeley <span class="has-text-grey-light">*</span> equal contribution</div>
+        <div class="container is-max-desktop">
+          <div class="columns is-centered">
+            <div class="column has-text-centered is-four-fifths">
+              <div class="is-size-5 publication-authors">
+                <span class="author-block"><a href="https://wen-hanhsieh.github.io/" target="_blank">Wen-Han Hsieh *</a>,</span>
+                <span class="author-block"><a href="https://elvishh77.github.io/" target="_blank">Elvis Hsieh *</a>,</span>
+                <span class="author-block"><a href="https://dantong88.github.io/" target="_blank">Dantong Niu</a>,</span>
+                <span class="author-block"><a href="https://people.eecs.berkeley.edu/~trevor/" target="_blank">Trevor Darrell</a>,</span>
+                <span class="author-block"><a href="https://roeiherz.github.io/" target="_blank">Roei Herzig</a>,</span>
+                <span class="author-block"><a href="https://dchan.cc/" target="_blank">David M. Chan</a></span>
+              </div>
 
-        <div class="badges" style="margin-top:1rem;">
-          <a class="button is-link is-light is-rounded" href="https://arxiv.org/abs/2508.16292" target="_blank">arXiv</a>
-          <a class="button is-link is-rounded" href="https://arxiv.org/pdf/2508.16292" target="_blank">PDF</a>
-          <a class="button is-dark is-rounded" href="https://github.com/iva-vla" target="_blank">Code &amp; Data</a>
+              <div class="is-size-5 publication-authors">
+                <span class="author-block">UC Berkeley</span>
+              </div>
+
+              <br>
+              <div class="column has-text-centered">
+                <div class="publication-links">
+                  <span class="link-block">
+                    <a href="https://arxiv.org/abs/2508.16292" target="_blank" class="external-link button is-normal is-rounded is-dark">
+                      <span class="icon"><i class="ai ai-arxiv"></i></span><span>arXiv</span>
+                    </a>
+                  </span>
+                  <span class="link-block">
+                    <a href="https://arxiv.org/pdf/2508.16292" target="_blank" class="external-link button is-normal is-rounded is-dark">
+                      <span class="icon"><i class="ai ai-arxiv"></i></span><span>PDF</span>
+                    </a>
+                  </span>
+                  <span class="link-block">
+                    <a href="https://github.com/iva-vla" target="_blank" class="external-link button is-normal is-rounded is-dark">
+                      <span class="icon"><i class="fa-brands fa-github"></i></span><span>Code &amp; Data</span>
+                    </a>
+                  </span>
+                </div>
+              </div>
+
+            </div>
+          </div>
         </div>
+
       </div>
     </div>
   </section>
 
   <!-- Abstract -->
-  <section class="section">
+  <section class="section hero">
     <div class="container is-max-desktop">
-      <h2 class="title is-4">Abstract</h2>
-      <div class="content has-text-justified">
-        <p>
-          IVA is a unified framework for Vision-Language-Action models that <em>detects</em> when an instruction is unfulfillable (false premise),
-          <em>clarifies or corrects</em> it in natural language, and then <em>acts safely</em>. Trained with paired true- and false-premise instructions,
-          IVA improves false-premise handling while maintaining strong true-premise task performance.
-        </p>
-      </div>
+      <div class="columns is-centered has-text-centered">
+        <div class="column is-full">
+          <h2 class="title is-4">Abstract</h2>
+          <div class="content has-text-justified">
+            <p>
+              IVA is a unified framework for Vision-Language-Action models that <em>detects</em> when an instruction is unfulfillable (false premise),
+              <em>clarifies or corrects</em> it in natural language, and then <em>acts safely</em>. Trained with paired true- and false-premise instructions,
+              IVA improves false-premise handling while maintaining strong true-premise task performance.
+            </p>
+          </div>
 
-      <!-- Figure 1 placed AFTER the abstract -->
-      <figure class="image" style="margin-top:1.25rem;">
-        <img src="static/images/fig1_teaser.png" alt="Figure 1: IVA detects a false-premise instruction and clarifies it." />
-        <figcaption>Figure 1: IVA detects a false-premise instruction, clarifies, and suggests a valid alternative.</figcaption>
-      </figure>
+          <!-- Figure 1 -->
+          <figure class="image fig-medium">
+            <img src="static/images/fig1_teaser.png" alt="Figure 1: IVA detects a false-premise instruction, clarifies, and suggests a valid alternative.">
+            <figcaption>Figure 1: IVA detects a false-premise instruction, clarifies, and proposes a valid alternative.</figcaption>
+          </figure>
+
+        </div>
+      </div>
     </div>
   </section>
 
-  <!-- Method (from paper) -->
-  <section class="section">
+  <!-- Why IVA? -->
+  <section class="section hero">
     <div class="container is-max-desktop">
-      <h2 class="title is-4">Method</h2>
-      <div class="content">
-        <ul>
-          <li><b>End-to-end instruction tuning:</b> Unlike LLaRVA’s two-stage pretrain+finetune, IVA trains in one stage to learn action prediction, false-premise detection, and language correction jointly. :contentReference[oaicite:0]{index=0}</li>
-          <li><b>Inputs & Outputs:</b> Front camera + 5 previous joint positions in; model predicts a 2D visual trace and the next action step as an 8-D vector (7 joint velocities + binary gripper). :contentReference[oaicite:1]{index=1}</li>
-          <li><b>Frozen encoders, LoRA decoder:</b> Vision & language encoders are frozen; the auto-regressive transformer decoder is fine-tuned with LoRA adapters. </li>
-          <li><b>Training mixture:</b> ~800 episodes per task; ~65% In-Domain FP injected at 10% of steps and ~20% Out-of-Domain FP; rest are true-premise.  </li>
-        </ul>
+      <div class="columns is-centered has-text-centered">
+        <div class="column is-full">
+          <h2 class="title is-4">Why IVA?</h2>
+          <div class="content has-text-justified">
+            <ul>
+              <li>Most VLAs assume user instructions are always feasible; in practice, humans often give commands with <b>false premises</b> (missing/incorrect objects, impossible constraints).</li>
+              <li>Naïvely following such instructions leads to <b>unsafe</b> or wasted behavior. IVA introduces explicit <b>detection</b> and <b>clarification</b> to keep interactions safe and productive.</li>
+              <li>IVA targets two categories of false premises: <b>In-Domain</b> (plausible but absent) and <b>Out-of-Domain</b> (impossible/absurd) and handles both within a single framework.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
 
-        <h3 class="title is-5" style="margin-top:1rem;">Evaluation Procedure</h3>
-        <ul>
-          <li><b>(1) Detection:</b> classify the response as Accept (TP) vs Clarify/Refuse (FP); score per step and average. </li>
-          <li><b>(2) Execution:</b> if Accept, execute predicted 8-D action sequence; RLBench success detector judges success/failure. </li>
-          <li><b>(3) Overall:</b> average Detection + Execution across 225 episodes (25 × 9 tasks). </li>
-        </ul>
+  <!-- Our Solution (method details) -->
+  <section class="section hero">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered has-text-centered">
+        <div class="column is-full">
+          <h2 class="title is-4">Our Solution</h2>
+          <div class="content has-text-justified">
+            <ul>
+              <li><b>Single-stage end-to-end tuning:</b> IVA jointly learns <i>false-premise detection</i>, <i>language clarification/correction</i>, and <i>action prediction</i>, rather than decoupled stages.</li>
+              <li><b>Inputs &amp; Outputs:</b> front camera and the previous 5 joint states → predicted 2-D visual trace + next action as an 8-D vector (7 joint velocities + binary gripper).</li>
+              <li><b>Architecture:</b> frozen vision &amp; language encoders; an auto-regressive decoder fine-tuned with <i>LoRA</i> adapters to keep training efficient and stable.</li>
+              <li><b>Instruction template:</b> structured prompt including robot type, control mode, and a short history enables grounded reasoning and action generation.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Dataset construction -->
+  <section class="section hero">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered has-text-centered">
+        <div class="column is-full">
+          <h2 class="title is-4">How did we construct the dataset?</h2>
+          <div class="content has-text-justified">
+            <ul>
+              <li>Built on <b>RLBench</b> with paired <i>true</i> and <i>false-premise</i> prompts for each episode across 9 tasks.</li>
+              <li>~<b>800</b> episodes per task with a mixture: roughly <b>65%</b> in-domain false premises (injected at ~10% of steps), <b>20%</b> out-of-domain, remainder true-premise.</li>
+              <li>False-premise prompts cover absence, mismatch (color/shape/count), and impossible actions, encouraging robust detection and safe responses.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Evaluation protocol -->
+  <section class="section hero">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered has-text-centered">
+        <div class="column is-full">
+          <h2 class="title is-4">Evaluation Protocol</h2>
+          <div class="content has-text-justified">
+            <ul>
+              <li><b>Tasks &amp; episodes:</b> 9 RLBench tasks, <b>25</b> episodes each (225 total) with randomized object poses and paired prompts.</li>
+              <li><b>(1) Detection:</b> classify Accept (true-premise) vs Clarify/Refuse (false-premise) and average per-step scores.</li>
+              <li><b>(2) Execution:</b> when Accept, roll out predicted action sequence; success judged by RLBench success detector.</li>
+              <li><b>(3) Overall:</b> average detection and execution outcomes for a single overall score.</li>
+            </ul>
+          </div>
+        </div>
       </div>
     </div>
   </section>
 
   <!-- Results (Table 1 + Figure C.2) -->
-  <section class="section">
+  <section class="section hero">
     <div class="container is-max-desktop">
-      <h2 class="title is-4">Results</h2>
+      <div class="columns is-centered has-text-centered">
+        <div class="column is-full">
+          <h2 class="title is-4">Results</h2>
 
-      <div class="content">
-        <ul>
-          <li><b>In-Domain FP detection: 100%</b> across tasks. </li>
-          <li><b>Gains vs baseline:</b> FP detection accuracy +<b>97.56%</b>; successful responses in FP scenarios +<b>50.78%</b>. </li>
-          <li><b>Per-task comparison:</b> see Table 1. </li>
-        </ul>
+          <div class="content has-text-justified">
+            <ul>
+              <li><b>In-Domain FP detection:</b> <b>100%</b> (perfect) across tasks.</li>
+              <li><b>Large gains vs. baseline:</b> FP detection accuracy improves substantially; successful responses in false-premise scenarios increase markedly.</li>
+              <li><b>True-premise performance:</b> maintained at a strong level, comparable to baseline.</li>
+            </ul>
+          </div>
+
+          <!-- Table 1 -->
+          <div class="item is-vcentered" style="display:flex; justify-content:center; align-items:center; min-height:8vh; padding:1px 0;">
+            <img src="static/images/table1_results.png" alt="Table 1: IVA vs. LLaRVA across 9 RLBench tasks" width="70%" />
+          </div>
+
+          <br>
+          <!-- Figure C.2 -->
+          <div class="item is-vcentered" style="display:flex; justify-content:center; align-items:center; min-height:8vh; padding:1px 0;">
+            <img src="static/images/figC2_tasks.png" alt="Figure C.2: Qualitative examples across 9 RLBench tasks" width="80%" />
+          </div>
+
+        </div>
       </div>
+    </div>
+  </section>
 
-      <figure class="image">
-        <img src="static/images/table1_results.png" alt="Table 1: Per-task comparison of IVA vs. LLaRVA on RLBench tasks." />
-        <figcaption>Table 1: IVA vs. LLaRVA across 9 RLBench tasks (Overall Success, FP Detection In/Out, TP Success). </figcaption>
-      </figure>
-
-      <h3 class="title is-5" style="margin-top:1.25rem;">Qualitative Examples (Appendix)</h3>
-      <figure class="image">
-        <img src="static/images/figC2_tasks.png" alt="Figure C.2: Qualitative examples across 9 RLBench tasks." />
-        <figcaption>Figure C.2: Qualitative examples of the 9 evaluated tasks. :contentReference[oaicite:12]{index=12}</figcaption>
-      </figure>
+  <!-- Takeaways / Conclusion -->
+  <section class="section hero">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered has-text-centered">
+        <div class="column is-full">
+          <h2 class="title is-4">Key Takeaways</h2>
+          <div class="content has-text-justified">
+            <ul>
+              <li>IVA makes VLA systems <b>safer</b> by detecting false premises and asking appropriate clarifying questions or offering valid alternatives.</li>
+              <li>It delivers <b>large gains</b> on false-premise scenarios <i>without</i> sacrificing performance on feasible (true-premise) instructions.</li>
+              <li>The framework is <b>general</b> and can extend to broader robotic tasks, perception inputs, and interaction settings.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
     </div>
   </section>
 
   <!-- BibTeX -->
-  <section class="section" id="bibtex">
-    <div class="container is-max-desktop">
-      <h2 class="title is-4">BibTeX</h2>
+  <section class="section" id="BibTeX">
+    <div class="container is-max-desktop content">
+      <h2 class="title">BibTeX</h2>
       <pre><code>@article{iva2025,
   title   = {Do What? Teaching Vision-Language-Action Models to Reject the Impossible},
   author  = {Wen-Han Hsieh and Elvis Hsieh and Dantong Niu and Trevor Darrell and Roei Herzig and David M. Chan},
@@ -166,9 +280,25 @@
   </section>
 
   <footer class="footer">
-    <div class="content has-text-centered">
-      <p>Built with the <a href="https://github.com/eliahuhorwitz/Academic-project-page-template" target="_blank">Academic Project Page Template</a></p>
+    <div class="container">
+      <div class="columns is-centered">
+        <div class="column is-8">
+          <div class="content">
+            <p>
+              This page was built using the
+              <a href="https://github.com/eliahuhorwitz/Academic-project-page-template" target="_blank">Academic Project Page Template</a>
+              which was adopted from the <a href="https://nerfies.github.io" target="_blank">Nerfies</a> project page.
+              You are free to borrow the structure of this website; please link back in the footer.
+              <br>This website is licensed under a
+              <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/" target="_blank">
+                Creative Commons Attribution-ShareAlike 4.0 International License
+              </a>.
+            </p>
+          </div>
+        </div>
+      </div>
     </div>
   </footer>
+
 </body>
 </html>
