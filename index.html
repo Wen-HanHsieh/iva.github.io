@@ -1,61 +1,106 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="description" content="IVA: Teaching Vision-Language-Action Models to Reject the Impossible">
+  <meta charset="utf-8" />
+  <title>Do What? Teaching Vision-Language-Action Models to Reject the Impossible  </title>
+
+  <!-- Meta / SEO -->
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="IVA teaches Vision-Language-Action models to detect false-premise instructions, clarify them in natural language, and act safely." />
+  <meta name="keywords" content="Vision-Language-Action, Robotics, False Premise, Instruction Following, Human-Robot Interaction" />
+  <link rel="canonical" href="https://iva-vla.github.io/" />
+
+  <!-- Open Graph / Twitter -->
   <meta property="og:title" content="IVA: Instruct-Verify-and-Act" />
-  <meta property="og:description" content="IVA is a framework for Vision-Language-Action models that detects false-premise instructions, generates clarifications, and suggests valid alternatives. IVA improves false premise detection accuracy by 58.9% and increases successful responses by 27.9% compared to baselines." />
-  <meta property="og:url" content="http://iva-vla.github.io" />
-  <meta property="og:image" content="static/images/iva_logo.png" />
+  <meta property="og:description" content="Detect the impossible. Clarify intent. Act safely. IVA brings false-premise reasoning to VLA models." />
+  <meta property="og:url" content="https://iva-vla.github.io/" />
+  <!-- Use Figure 1 as the share image -->
+  <meta property="og:image" content="static/images/fig1_teaser.png" />
   <meta property="og:image:width" content="1200" />
   <meta property="og:image:height" content="630" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="IVA: Teaching VLAs to Reject the Impossible" />
+  <meta name="twitter:description" content="IVA detects false-premise instructions, asks clarifying questions, and proposes valid alternatives." />
+  <meta name="twitter:image" content="static/images/fig1_teaser.png" />
 
-  <meta name="twitter:title" content="IVA: Teaching VLAs to Reject the Impossible">
-  <meta name="twitter:description" content="IVA trains robots to detect false-premise instructions, clarify with language, and propose alternatives for safer human-robot interaction." />
-  <meta name="twitter:image" content="static/images/iva_logo.png">
-  <meta name="twitter:card" content="summary_large_image">
+  <!-- Favicon & Fonts -->
+  <link rel="icon" type="image/x-icon" href="static/images/favicon.ico" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Castoro:wght@400;700&display=swap" rel="stylesheet" />
 
-  <meta name="keywords" content="Vision-Language-Action Models, Robotics, False Premise Detection, Instruction Following">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- Bulma & Custom -->
+  <link rel="stylesheet" href="static/css/bulma.min.css" />
+  <link rel="stylesheet" href="static/css/index.css" />
 
-  <title>IVA: Instruct-Verify-and-Act</title>
-  <link rel="icon" type="image/x-icon" href="static/images/favicon.ico">
-  <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro" rel="stylesheet">
-  <link rel="stylesheet" href="static/css/bulma.min.css">
-  <link rel="stylesheet" href="static/css/index.css">
+  <style>
+    :root { --brand: #1f6feb; }
+    body { font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif; }
+    .hero.is-dark-gradient {
+      background: radial-gradient(1100px 600px at 10% 10%, rgba(31,111,235,0.10), transparent 45%),
+                  linear-gradient(180deg, #0b1220 0%, #0b1220 60%, #0d1326 100%);
+      color: #fff;
+    }
+    .hero .title, .hero .subtitle { color:#fff; }
+    .teaser {
+      width: 100%; border-radius: 16px; overflow: hidden;
+      border: 1px solid rgba(255,255,255,.18); box-shadow: 0 8px 24px rgba(0,0,0,.35);
+      background:#0f162a;
+    }
+    .badges .button { margin: .25rem .35rem; }
+    figure img { width:100%; border-radius: 12px; }
+    figcaption { color:#6b7280; text-align:center; margin-top:.4rem; }
+    .author-block a { text-decoration: none; }
+    .muted { color:#6b7280; }
+    pre code { white-space: pre-wrap; }
+  </style>
+
+  <!-- Schema.org -->
+  <script type="application/ld+json">
+  {
+    "@context":"https://schema.org",
+    "@type":"ScholarlyArticle",
+    "name":"Do What? Teaching Vision-Language-Action Models to Reject the Impossible",
+    "author":[
+      {"@type":"Person","name":"Wen-Han Hsieh"},
+      {"@type":"Person","name":"Elvis Hsieh"},
+      {"@type":"Person","name":"Dantong Niu"},
+      {"@type":"Person","name":"Trevor Darrell"},
+      {"@type":"Person","name":"Roei Herzig"},
+      {"@type":"Person","name":"David M. Chan"}
+    ],
+    "url":"https://arxiv.org/abs/2508.16292",
+    "inLanguage":"en"
+  }
+  </script>
 </head>
 
 <body>
-  <section class="hero">
+  <!-- HERO with Figure 1 teaser -->
+  <section class="hero is-dark-gradient">
     <div class="hero-body">
       <div class="container is-max-desktop">
-        <div class="columns is-centered is-vcentered">
-          <div class="column"><img src="static/images/iva_logo.png" height="187" width="187"></div>
-          <div class="column has-text-centered is-four-fifths">
-            <h1 class="title is-1">IVA: Instruct-Verify-and-Act</h1>
-            <h2 class="subtitle is-4">Teaching Vision-Language-Action Models to Reject the Impossible</h2>
+        <div class="columns is-vcentered is-variable is-6">
+          <div class="column is-5">
+            <!-- Figure 1 -->
+            <img class="teaser" src="static/images/fig1_teaser.png" alt="Figure 1: IVA detects a false-premise instruction and clarifies it." />
           </div>
-        </div>
+          <div class="column">
+            <h1 class="title is-1">IVA: Instruct-Verify-and-Act</h1>
+            <p class="subtitle is-4">Teaching Vision-Language-Action Models to Reject the Impossible</p>
 
-        <div class="columns is-centered">
-          <div class="column has-text-centered is-four-fifths">
             <div class="is-size-5 publication-authors">
-              <!-- Authors -->
-              <span class="author-block"><a href="https://wen-hanhsieh.github.io/" target="_blank">Wen-Han Hsieh*</a>,</span>
-              <span class="author-block"><a href="https://elvishh77.github.io/" target="_blank">Elvis Hsieh*</a>,</span>
+              <span class="author-block"><a href="https://wen-hanhsieh.github.io/" target="_blank">Wen-Han Hsieh</a><span class="has-text-grey-light">*</span>,</span>
+              <span class="author-block"><a href="https://elvishh77.github.io/" target="_blank">Elvis Hsieh</a><span class="has-text-grey-light">*</span>,</span>
               <span class="author-block"><a href="https://dantong88.github.io/" target="_blank">Dantong Niu</a>,</span>
-              <span class="author-block"><a href="https://people.eecs.berkeley.edu/~trevor/" target="_blank">Trevor Darrell</a></span>
+              <span class="author-block"><a href="https://people.eecs.berkeley.edu/~trevor/" target="_blank">Trevor Darrell</a>,</span>
               <span class="author-block"><a href="https://roeiherz.github.io/" target="_blank">Roei Herzig</a>,</span>
-              <span class="author-block"><a href="https://dchan.cc/" target="_blank">David M. Chan</a>,</span>
+              <span class="author-block"><a href="https://dchan.cc/" target="_blank">David M. Chan</a></span>
             </div>
+            <div class="muted">University of California, Berkeley <span class="has-text-grey-light">*</span> equal contribution</div>
 
-            <div class="is-size-5 publication-authors">
-              <span class="author-block">UC Berkeley</span>
-            </div>
-
-            <div class="publication-links">
-              <a href="https://arxiv.org/abs/XXXX.XXXXX" target="_blank" class="button is-dark is-rounded">arXiv</a>
-              <a href="https://github.com/iva-vla" target="_blank" class="button is-dark is-rounded">Code & Dataset</a>
+            <div class="badges" style="margin-top:1rem;">
+              <a class="button is-link is-light is-rounded" href="https://arxiv.org/abs/2508.16292" target="_blank">arXiv</a>
+              <a class="button is-link is-rounded" href="https://arxiv.org/pdf/2508.16292" target="_blank">PDF</a>
+              <a class="button is-dark is-rounded" href="https://github.com/iva-vla" target="_blank">Code &amp; Data</a>
             </div>
           </div>
         </div>
@@ -64,49 +109,56 @@
   </section>
 
   <!-- Abstract -->
-  <section class="section hero">
+  <section class="section">
     <div class="container is-max-desktop">
       <h2 class="title is-4">Abstract</h2>
       <div class="content has-text-justified">
         <p>
-        Vision-Language-Action (VLA) models enable robots to follow natural language instructions grounded in visual perception and actions. However, most assume instructions are always feasible. We propose <b>IVA (Instruct-Verify-and-Act)</b>, a unified framework that (i) detects when an instruction cannot be executed due to a false premise, (ii) generates clarifications or corrections, and (iii) grounds plausible alternatives in perception and action. IVA is trained with a semi-synthetic dataset of true and false-premise instructions, enabling robust detection and correction. Experiments on RLBench tasks show IVA improves false premise detection accuracy by <b>58.9%</b> and increases successful responses in false-premise scenarios by <b>27.9%</b> compared to baselines:contentReference[oaicite:0]{index=0}.
+          IVA is a unified framework for Vision-Language-Action models that <em>detects</em> when an instruction is unfulfillable (false premise),
+          <em>clarifies or corrects</em> it in natural language, and then <em>acts safely</em>. Trained with paired true- and false-premise instructions,
+          IVA improves false-premise handling while maintaining strong true-premise task performance. See the paper for details.
         </p>
       </div>
     </div>
   </section>
 
-  <!-- Results -->
-  <section class="section hero">
+  <!-- Results (Table 1 + Figure C.2) -->
+  <section class="section">
     <div class="container is-max-desktop">
-      <h2 class="title is-4">Key Results</h2>
-      <ul>
-        <li><b>False Premise Detection</b>: 100% accuracy on easy false premises, 17.8% on hard false premises.</li>
-        <li><b>Improved Success Rates</b>: +27.9% improvement in false-premise handling compared to LLaRVA baseline:contentReference[oaicite:1]{index=1}.</li>
-        <li><b>Stable True-Premise Performance</b>: Maintains ~35% task success rate on true-premise tasks, comparable to baseline.</li>
-      </ul>
-      <div class="item is-vcentered">
-        <img src="static/images/results_table.png" alt="IVA vs LLaRVA results" width="90%">
-      </div>
+      <h2 class="title is-4">Results</h2>
+
+      <!-- Table 1 image -->
+      <figure class="image">
+        <img src="static/images/table1_results.png" alt="Table 1: Per-task comparison of IVA vs. LLaRVA on RLBench tasks." />
+        <figcaption>Table 1: IVA vs. LLaRVA across 9 RLBench tasks (Overall Success, FP Detection In/Out, TP Success).</figcaption>
+      </figure>
+
+      <!-- Figure C.2 image -->
+      <h3 class="title is-5" style="margin-top:1.5rem;">Qualitative Examples (Appendix)</h3>
+      <figure class="image">
+        <img src="static/images/figC2_tasks.png" alt="Figure C.2: Qualitative examples across 9 RLBench tasks." />
+        <figcaption>Figure C.2: Qualitative examples of the 9 evaluated tasks.</figcaption>
+      </figure>
     </div>
   </section>
 
   <!-- BibTeX -->
-  <section class="section" id="BibTeX">
-    <div class="container is-max-desktop content">
-      <h2 class="title">BibTeX</h2>
+  <section class="section" id="bibtex">
+    <div class="container is-max-desktop">
+      <h2 class="title is-4">BibTeX</h2>
       <pre><code>@article{iva2025,
-  title={Do What? Teaching Vision-Language-Action Models to Reject the Impossible},
-  author={Wen-Han Hsieh and Elvis Hsieh and Dantong Niu and Trevor Darrell and Roei Herzig and David M. Chan},
-  journal={arXiv preprint},
-  year={2025},
-  url={https://arxiv.org/abs/XXXX.XXXXX}
+  title   = {Do What? Teaching Vision-Language-Action Models to Reject the Impossible},
+  author  = {Wen-Han Hsieh and Elvis Hsieh and Dantong Niu and Trevor Darrell and Roei Herzig and David M. Chan},
+  journal = {arXiv preprint},
+  year    = {2025},
+  url     = {https://arxiv.org/abs/2508.16292}
 }</code></pre>
     </div>
   </section>
 
   <footer class="footer">
-    <div class="container has-text-centered">
-      <p>Built with the <a href="https://github.com/eliahuhorwitz/Academic-project-page-template">Academic Project Page Template</a></p>
+    <div class="content has-text-centered">
+      <p>Built with the <a href="https://github.com/eliahuhorwitz/Academic-project-page-template" target="_blank">Academic Project Page Template</a></p>
     </div>
   </footer>
 </body>
